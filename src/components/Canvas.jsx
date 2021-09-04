@@ -60,6 +60,7 @@ const Canvas = observer( () => {
                 Brush.draw(ctx, figure.x, figure.y)
                 break
             case 'finish':
+
                 ctx.beginPath()
                 break
         }
