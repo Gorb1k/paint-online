@@ -20,6 +20,9 @@ const Canvas = observer( () => {
     useEffect(() => {
         if (canvasState.username) {
             const socket = new WebSocket('ws://localhost:5000/')
+            canvasState.setSocket(socket)
+            canvasState.setSessionId(params.id)
+            toolState.setTool(new Brush(canvasRef.current, socket, params.id))
             socket.onopen = () => {
                 console.log('подключение установлено')
                 socket.send(JSON.stringify({
@@ -29,7 +32,15 @@ const Canvas = observer( () => {
                 }))
             }
             socket.onmessage = (e) => {
-                console.log(e.data)
+                let msg = JSON.parse(e.data)
+                switch (msg.method) {
+                    case 'connection':
+                        console.log(`позьзователь с ником ${msg.username} подключился к сессии: ${msg.id}`)
+                        break
+                    case 'draw':
+                        drawHandler(msg)
+                        break
+                }
             }
         }
     },[canvasState.username])
@@ -40,6 +51,18 @@ const Canvas = observer( () => {
     const connectionHandler = () => {
       canvasState.setUsername(usernameField)
         setModal(false)
+    }
+    const drawHandler = (message) => {
+        const figure = message.figure
+        const ctx = canvasRef.current.getContext('2d')
+        switch (figure.type) {
+            case "brush":
+                Brush.draw(ctx, figure.x, figure.y)
+                break
+            case 'finish':
+                ctx.beginPath()
+                break
+        }
     }
 
     return (
