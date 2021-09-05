@@ -6,6 +6,7 @@ import toolState from "../store/toolState";
 import Brush from "../tools/Brush";
 import {Button, Modal} from "react-bootstrap";
 import {useParams} from "react-router-dom";
+import Rect from "../tools/Rect";
 
 const Canvas = observer( () => {
     const canvasRef = useRef()
@@ -59,8 +60,10 @@ const Canvas = observer( () => {
             case "brush":
                 Brush.draw(ctx, figure.x, figure.y)
                 break
+            case 'rect':
+                Rect.staticDraw(ctx, figure.x, figure.y, figure.width, figure.height)
+                break
             case 'finish':
-
                 ctx.beginPath()
                 break
         }
