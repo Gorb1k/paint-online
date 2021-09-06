@@ -1,6 +1,6 @@
 import Tool from "./Tools";
 
-export default class Brush extends Tool{
+export default class Brush extends Tool {
     constructor(canvas, socket, id) {
         super(canvas, socket, id);
         this.listen()
@@ -13,22 +13,22 @@ export default class Brush extends Tool{
     }
 
     mouseUpHandler(e) {
-        this.mousedown = false
+        this.mouseDown = false
         this.socket.send(JSON.stringify({
             method: 'draw',
             id: this.id,
             figure: {
-                type: 'finish'
+                type: 'finish',
             }
         }))
     }
     mouseDownHandler(e) {
-        this.mousedown = true
+        this.mouseDown = true
         this.ctx.beginPath()
         this.ctx.moveTo(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop)
     }
     mouseMoveHandler(e) {
-        if (this.mousedown) {
+        if (this.mouseDown) {
             // this.draw(e.pageX - e.target.offsetLeft, e.pageY - e.target.offsetTop)
             this.socket.send(JSON.stringify({
                 method: 'draw',

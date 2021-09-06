@@ -17,9 +17,9 @@ export default class Line extends Tool{
     }
     mouseDownHandler(e) {
         this.mousedown = true
-        this.ctx.beginPath()
         this.startX = e.pageX - e.target.offsetLeft
         this.startY = e.pageY - e.target.offsetTop
+        this.ctx.beginPath()
         this.ctx.moveTo(this.startX, this.startY)
         this.saved = this.canvas.toDataURL()
     }
@@ -32,7 +32,7 @@ export default class Line extends Tool{
     draw(currentX, currentY) {
         const img = new Image()
         img.src = this.saved
-        img.onload =  () => {
+        img.onload = async () => {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
             this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height)
             this.ctx.beginPath()

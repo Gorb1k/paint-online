@@ -16,12 +16,14 @@ export default class Rect extends Tool {
         this.mousedown = false
         this.socket.send(JSON.stringify({
             method: 'draw',
+            id: this.id,
             figure: {
                 type: 'rect',
                 x: this.startX,
                 y: this.startY,
                 width: this.width,
-                height: this.height
+                height: this.height,
+                color: this.ctx.fillStyle
             }
         }))
     }
@@ -57,7 +59,8 @@ export default class Rect extends Tool {
         }
     }
 
-    static staticDraw(ctx, x, y, w, h) {
+    static staticDraw(ctx, x, y, w, h, color) {
+        ctx.fillStyle = color
         ctx.beginPath()
         ctx.rect(x, y, w, h)
         ctx.fill()
